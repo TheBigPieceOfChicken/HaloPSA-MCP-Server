@@ -158,6 +158,7 @@ export function registerTicketTools(
       urgency: z.number().optional().describe("Urgency level (e.g. 0=unset). Required by some HaloPSA configs"),
       sla_id: z.number().optional().describe("SLA ID"),
       deadlinedate: z.string().optional().describe("Deadline date (ISO 8601)"),
+      dateoccurred: z.string().optional().describe("When the ticket occurred (ISO 8601). Use for backdating tickets to a past date. Defaults to now."),
     },
   }, async (args) => {
     try {

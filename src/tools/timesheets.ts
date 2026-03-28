@@ -136,10 +136,14 @@ export function registerTimesheetTools(
         .number()
         .optional()
         .describe("Outcome ID (alternative to outcome name)"),
+      datetime: z
+        .string()
+        .optional()
+        .describe("When the work was performed (ISO 8601). Use for backdating time entries. Defaults to now."),
     },
   }, async (args) => {
     try {
-      const result = await client.post<HaloAction>("/Actions", {
+      const actionBody: Record<string, unknown> = {
         ticket_id: args.ticket_id,
         timetaken: args.timetaken,
         note: args.note,
@@ -149,7 +153,12 @@ export function registerTimesheetTools(
         actisbillable: args.actisbillable ?? true,
         outcome: args.outcome,
         outcome_id: args.outcome_id,
-      });
+      };
+      if (args.datetime) {
+        actionBody.datetime = args.datetime;
+        actionBody.actioncompletiondate = args.datetime;
+      }
+      const result = await client.post<HaloAction>("/Actions", actionBody);
       return {
         content: [
           {

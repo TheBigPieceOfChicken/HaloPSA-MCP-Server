@@ -24,6 +24,7 @@ export function registerWorkflowTools(
       outcome: z.string().optional().describe("Outcome type for the closing action (e.g. 'Note')"),
       timetaken: z.number().optional().describe("Final time to log in minutes (optional)"),
       status_id: z.number().optional().describe("Status ID to set (default: 9 = Closed)"),
+      datetime: z.string().optional().describe("When the work was performed (ISO 8601). Use for backdating. Defaults to now."),
     },
   }, async (args) => {
     try {
@@ -41,6 +42,10 @@ export function registerWorkflowTools(
       };
       if (args.timetaken) {
         actionBody.timetaken = args.timetaken;
+      }
+      if (args.datetime) {
+        actionBody.datetime = args.datetime;
+        actionBody.actioncompletiondate = args.datetime;
       }
       await client.post<HaloAction>("/Actions", actionBody);
       return {
