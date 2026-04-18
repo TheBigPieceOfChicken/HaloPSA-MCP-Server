@@ -30,4 +30,22 @@ export function registerRunbookTools(
       return errorResult(error);
     }
   });
+
+  server.registerTool("halo_get_runbook", {
+    title: "Get Runbook",
+    description:
+      "Fetch a single HaloPSA Integration Runbook (Webhook) by id, returning its full JSON including variables, steps, events, and all other fields. Useful as a template for halo_create_runbook — clone a similar existing runbook's JSON structure.",
+    inputSchema: {
+      id: z.string().describe("Runbook UUID"),
+    },
+  }, async (args) => {
+    try {
+      const result = await client.get<Record<string, unknown>>(`/Webhook/${args.id}`);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (error) {
+      return errorResult(error);
+    }
+  });
 }
