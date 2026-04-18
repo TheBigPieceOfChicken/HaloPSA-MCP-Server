@@ -22,6 +22,7 @@ import { registerRecurringInvoiceTools } from "./recurring-invoices.js";
 import { registerCategoryTools } from "./categories.js";
 import { registerWorkflowTools } from "./workflows.js";
 import { registerServiceTools } from "./services.js";
+import { registerRunbookTools } from "./runbooks.js";
 
 export function registerAllTools(
   server: McpServer,
@@ -64,4 +65,7 @@ export function registerAllTools(
 
   // Phase - Service Catalog
   registerServiceTools(server, client);
+
+  // Phase - Integration Runbooks
+  registerRunbookTools(server, client);
 }
